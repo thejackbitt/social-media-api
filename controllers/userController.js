@@ -11,7 +11,7 @@ module.exports = {
   },
   async getSingleUser(req, res) {
     try {
-      const user = await User.findOne({ uuid: req.params.userId }).select(
+      const user = await User.findOne({ _id: req.params._id }).select(
         "-__v"
       );
 
@@ -35,7 +35,7 @@ module.exports = {
   async updateUser(req, res) {
     try {
       const user = await User.findOneAndUpdate(
-        { uuid: req.params.userId },
+        { _id: req.params._id },
         { $set: req.body },
         { runValidators: true, new: true }
       );
@@ -54,7 +54,7 @@ module.exports = {
   },
   async deleteUser(req, res) {
     try {
-        const user = await User.findOneAndDelete({ uuid: req.params.userId });
+        const user = await User.findOneAndDelete({ _id: req.params._id });
 
         if (!user) {
             return res
@@ -63,6 +63,45 @@ module.exports = {
         }
     } catch (err) {
         res.status(500).json(err);
+    }
+  },
+  async addFriend(req, res) {
+    try {
+      const user = await User.findOneAndUpdate(
+        { _id: req.params._id },
+        { $addToSet: { friends: req.params.friendId } },
+        { runValidators: true, new: true }
+      );
+  
+      if (!user) {
+        return res
+          .status(404)
+          .json({ message: "Ruh roh, Raggy!  No user with that ID."});
+      }
+  
+      res.json(user);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+  
+  async unFriend(req, res) {
+    try {
+      const user = await User.findOneAndUpdate(
+        { _id: req.params._id },
+        { $pull: { friends: req.params.friendId } },
+        { runValidators: true, new: true }
+      );
+  
+      if (!user) {
+        return res
+          .status(404)
+          .json({ message: "Ruh roh, Raggy!  No user with that ID."});
+      }
+  
+      res.json(user);
+    } catch (err) {
+      res.status(500).json(err);
     }
   }
 };

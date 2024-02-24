@@ -16,17 +16,17 @@ router
     .post(createThought);
 
 router
-  .route('/:tid')
+  .route('/:_id')
   .get(getSingleThought)
   .put(updateThought)
   .delete(deleteThought);
 
 router
-    .route('/:tid/reactions')
+    .route('/:_id/reactions')
     .post(addThoughtReaction);
 
 router
-    .route('/:tid/reactions/:rid')
+    .route('/:_id/reactions/:reactionId')
     .put(updateThoughtReaction)
     .delete(removeThoughtReaction);
 
