@@ -95,24 +95,40 @@ const reaction = [
 ];
 
 function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
+  return Math.floor(Math.random() * max);
+}
+
+function getRandomUser() {
+  const baseIndex = getRandomInt(username.length);
+  const uniqueSuffix = Date.now() + getRandomInt(1000);
+  return {
+    username: `${username[baseIndex]}_${uniqueSuffix}`,
+    email: `${email[baseIndex].split('@')[0]}_${uniqueSuffix}@${email[baseIndex].split('@')[1]}`
+  };
+}
+
+function getRandomThoughts(n = 2) {
+  let thoughts = [];
+  for (let i = 0; i < n; i++) {
+    const thoughtIndex = getRandomInt(thought.length);
+    const reactions = [];
+    for (let j = 0; j < 3; j++) {
+      reactions.push(reaction[getRandomInt(reaction.length)]);
+    }
+    thoughts.push({
+      thought: thought[thoughtIndex],
+      reactions: reactions
+    });
   }
-  
-  function getRandomUser() {
-    const index = getRandomInt(username.length);
-    return {
-      username: username[index],
-      email: email[index]
-    };
+  return thoughts;
+}
+
+function getRandomFriends(n = 1) {
+  let friends = [];
+  for (let i = 0; i < n; i++) {
+    friends.push(username[getRandomInt(username.length)]);
   }
-  
-  function getRandomThoughts() {
-    const index = getRandomInt(thought.length);
-    return {
-      thought: thought[index],
-      reaction: reaction[index]
-    };
-  }
-  
-  module.exports = { getRandomUser, getRandomThoughts };
-  
+  return friends;
+}
+
+module.exports = { getRandomUser, getRandomThoughts, getRandomFriends };

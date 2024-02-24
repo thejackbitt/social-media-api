@@ -1,40 +1,34 @@
 const connection = require('../config/connection');
 const { User, Thought } = require('../models');
-const { getRandomUser, getRandomThoughts } = require('./data');
+const { getRandomUser, getRandomThoughts, getRandomFriends } = require('./data');
 
 connection.on('error', (err) => err);
 
 connection.once('open', async () => {
-
     console.log('connected');
-    
-    let thoughtCheck = await connection.db.listCollections({ name: 'thoughts' }).toArray();
-    if (thoughtCheck.length) {
-        await connection.dropCollection('thoughts');
-    }
 
-    let userCheck = await connection.db.listCollections({ name: 'users'}).toArray();
-    if (userCheck.length) {
-        await connection.dropCollection('users');
-    }
+    await connection.db.dropCollection('thoughts').catch(err => console.log('No thoughts collection to drop:', err.message));
+    await connection.db.dropCollection('users').catch(err => console.log('No users collection to drop:', err.message));
 
     const users = [];
-    const thoughts = getRandomThoughts(10);
+    const thoughts = [];
 
-    for (let i = 0; i < 20; i++ ) {
-        const username = getRandomUser();
-
-        users.push({
-            username,
-            email,
-        });
+    for (let i = 0; i < 20; i++) {
+        const thoughtsForUser = getRandomThoughts(2);
+        thoughts.push(...thoughtsForUser);
     }
 
-    await User.collection.insertMany(users);
+    for (let i = 0; i < 20; i++) {
+        const newUser = getRandomUser();
+        newUser.friends = getRandomFriends();
+        newUser.thoughts = getRandomThoughts(2);
+        users.push(newUser);
+    }
+    
     await Thought.collection.insertMany(thoughts);
+    await User.collection.insertMany(users);
 
     console.table(users);
-    console.table(thoughts);
     console.info('Seeding successful!');
     process.exit(0);
 });
