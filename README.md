@@ -8,4 +8,4 @@ Social Media API is a Node-based app that uses a Mongoose database to manage lar
 
 ## Video Demonstration
 To see this application in use, click on the link below:
-![Video Demo Link on Google Drive](https://drive.google.com/file/d/1Obp3UdoqWGoU6KEFUMStu5SQoyyG9ybr/view?usp=sharing)
+[Video Demo Link on Google Drive](https://drive.google.com/file/d/1Obp3UdoqWGoU6KEFUMStu5SQoyyG9ybr/view?usp=sharing)
